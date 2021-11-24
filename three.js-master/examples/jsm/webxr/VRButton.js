@@ -128,7 +128,7 @@ class VRButton {
 
 			stylizeElement( button );
 
-			navigator.vr.isSessionSupported( 'immersive-vr' ).then( function ( supported ) {
+			navigator.xr.isSessionSupported( 'immersive-vr' ).then( function ( supported ) {
 
 				supported ? showEnterVR() : showWebXRNotFound();
 
