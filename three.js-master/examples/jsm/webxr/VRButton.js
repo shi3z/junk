@@ -121,7 +121,7 @@ class VRButton {
 
 		}
 
-		if ( 'vr' in navigator ) {
+		if ( 'xr' in navigator ) {
 
 			button.id = 'VRButton';
 			button.style.display = 'none';
