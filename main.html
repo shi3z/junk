@@ -123,6 +123,8 @@
 
 										var message = "愛";
 
+					if(genFont.generateShapes){
+
 						var shapes = genFont.generateShapes( message, 100 );
 						var geometry = new THREE.ShapeGeometry( shapes );
 
@@ -139,6 +141,7 @@
 						text.position.y = Math.random()*1000-500;
 						text.position.z = - 150 - Math.random()*500;
 						scene.add( text );
+					}
 				}
 
 			},3000)
