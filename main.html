@@ -33,7 +33,7 @@
 
 			init();
 			animate();
-			renderer.setAnimationLoop( render );
+			//renderer.setAnimationLoop( render );
 			var genFont,matLite,matDark;
 
 			function init( ) {
@@ -140,7 +140,7 @@
 						var text = new THREE.Mesh( geometry, matLite );
 						text.position.x = Math.random()*1000-500;
 						text.position.y = Math.random()*1000-500;
-						text.position.z = - 150 - Math.random()*500;
+						text.position.z = Math.random()*1000-500;
 						scene.add( text );
 					}
 				}
@@ -158,9 +158,11 @@
 
 			function animate() {
 
-				requestAnimationFrame( animate );
+				renderer.setAnimationLoop( render );
 
-				render();
+				//requestAnimationFrame( animate );
+
+				//render();
 
 			}
 
