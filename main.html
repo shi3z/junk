@@ -107,7 +107,7 @@
 			} // end init
 
 			setTimeout(function(e){
-				for(var i=0;i<100;i++){
+				for(var i=0;i<1000;i++){
 					const color = 0x006699;
 
 					const matDark = new THREE.LineBasicMaterial( {
@@ -138,9 +138,9 @@
 						// make shape ( N.B. edge view not visible )
 
 						var text = new THREE.Mesh( geometry, matLite );
-						text.position.x = Math.random()*1000-500;
-						text.position.y = Math.random()*1000-500;
-						text.position.z = Math.random()*1000-500;
+						text.position.x = Math.random()*10000-5000;
+						text.position.y = Math.random()*10000-5000;
+						text.position.z = Math.random()*10000-5000;
 						scene.add( text );
 					}
 				}
