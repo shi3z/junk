@@ -51,7 +51,11 @@
 				const intensity = 1;
 
 				const hlight = new THREE.HemisphereLight(skyColor, groundColor, intensity);
-				scene.add(hlight);
+				//scene.add(hlight);
+
+
+				
+				scene.add( new THREE.AmbientLight(0xFFFFFF, 0.3));
 
 
 				//const color = 0xFFFFFF;
