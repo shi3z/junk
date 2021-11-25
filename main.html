@@ -28,6 +28,7 @@
 			import { FontLoader } from './three.js-master/examples/jsm/loaders/FontLoader.js';
 			//import { WEBVR } from './three.js-master/examples/js/vr/WebVR.js';
 			import { VRButton } from './three.js-master/examples/jsm/webxr/VRButton.js';
+			import { TextGeometry } from './three.js-master/examples/jsm/geometries/TextGeometry.js'
 
 			let camera, scene, renderer;
 
@@ -45,18 +46,34 @@
 				scene.background = new THREE.Color( 0xf0f0f0 );
 				scene.fog = new THREE.Fog(0xf0f0f0, 400, 10000);
 
+				const skyColor = 0xB1E1FF;  // light blue
+				const groundColor = 0xB97A20;  // brownish orange
+				const intensity = 1;
+
+				const hlight = new THREE.HemisphereLight(skyColor, groundColor, intensity);
+				scene.add(hlight);
+
+
+				//const color = 0xFFFFFF;
+				//const intensity = 1;
+				const light = new THREE.DirectionalLight(0xFFFFFF, intensity);
+				light.position.set(0, 10, 0);
+				light.target.position.set(-5, 0, -10);
+				scene.add(light);
+				scene.add(light.target);
+
 				const loader = new FontLoader();
 				loader.load( 'Gen.json', function ( font ) {
 					genFont=font;
 
-					const color = 0x006699;
+					const color = 0xff0000;
 
-					const matDark = new THREE.LineBasicMaterial( {
+					const matDark = new THREE.MeshPhongMaterial( {
 						color: color,
 						side: THREE.DoubleSide
 					} );
 
-					const matLite = new THREE.MeshBasicMaterial( {
+					const matLite = new THREE.MeshPhongMaterial( {
 						color: color,
 						//transparent: true,
 						opacity: 0.4,
@@ -107,23 +124,25 @@
 
 			} // end init
 
+			var entities=new Array()
+
 			setTimeout(function(e){
 				for(var i=0;i<1000;i++){
-					const color = 0x006699;
+					const color = 0xff0000;
 
-					const matDark = new THREE.LineBasicMaterial( {
+					const matDark = new THREE.MeshPhongMaterial( {
 						color: color,
 						side: THREE.DoubleSide
 					} );
 
-					const matLite = new THREE.MeshBasicMaterial( {
+					const matLite = new THREE.MeshPhongMaterial( {
 						color: color,
 						//transparent: true,
-						opacity: 0.4,
+						//opacity: 0.4,
 						side: THREE.DoubleSide
 					} );
 
-					var message = "金";
+					var message = "恋";
 
 					if(genFont.generateShapes){
 
@@ -142,11 +161,26 @@
 						text.position.x = Math.random()*10000-5000;
 						text.position.y = Math.random()*10000-5000;
 						text.position.z = Math.random()*10000-5000;
+						//scene.add( text );
+						//entities.push(text);
+
+						var TextGeo = new TextGeometry( message, {
+						                size: 100, height: 10, curveSegments: 3,
+						                font: genFont,
+						                bevelThickness: 1, bevelSize: 2, bevelEnabled: true
+						});
+
+						var text = new THREE.Mesh( TextGeo, matDark );
+						text.position.x = Math.random()*10000-5000;
+						text.position.y = Math.random()*10000-5000;
+						text.position.z = Math.random()*10000-5000;
 						scene.add( text );
+						entities.push(text);
+
 					}
 				}
 
-			},3000)
+			},100)
 
 			function onWindowResize() {
 
@@ -168,6 +202,13 @@
 			}
 
 			function render() {
+
+				entities.forEach(function(value,index,array){
+					value.position.y+=1;
+					if(value.position.y>5000)
+						value.position.y=-5000;
+
+				})
 
 				renderer.render( scene, camera );
 
