@@ -169,7 +169,13 @@
 						                font: genFont,
 						                bevelThickness: 1, bevelSize: 2, bevelEnabled: true
 						});
+						TextGeo.computeBoundingBox();
 
+						//console.log(TextGeo)
+
+						var xMid = - 0.5 * ( TextGeo.boundingBox.max.x - TextGeo.boundingBox.min.x );
+
+						TextGeo.translate( xMid, 0, 0 );
 						var text = new THREE.Mesh( TextGeo, matDark );
 						text.position.x = Math.random()*10000-5000;
 						text.position.y = Math.random()*10000-5000;
