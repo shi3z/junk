@@ -31,7 +31,7 @@
 			import { TextGeometry } from './three.js-master/examples/jsm/geometries/TextGeometry.js'
 
 			let camera, scene, renderer;
-
+			// オーディオコンテキスト取得
 			init();
 			animate();
 			//renderer.setAnimationLoop( render );
@@ -131,6 +131,7 @@
 
 			var entities=new Array()
 
+
 			setTimeout(function(e){
 				for(var i=0;i<1000;i++){
 					//const color = 0xff0000;
@@ -193,7 +194,7 @@
 					}
 				}
 
-			},3000)
+			},1000)
 
 			function onWindowResize() {
 
@@ -214,11 +215,65 @@
 
 			}
 
+			var isInit=false;
+			var ctx,analyser,frequencies;
+
+			window.onclick=function(){
+
+				 ctx = new (window.AudioContext || window.webkitAudioContext)();
+
+
+				 analyser = ctx.createAnalyser();
+				 frequencies = new Uint8Array(analyser.frequencyBinCount);
+
+				navigator.mediaDevices.getUserMedia({ audio: true })
+					.then(function (stream) {
+						window.hackForMozzila = stream;
+						//source = ctx.createMediaStreamSource(stream);
+						ctx.createMediaStreamSource(stream)
+							// AnalyserNodeに接続
+							.connect(analyser);
+					})
+					.catch(function (err) {
+						console.log(err.message);
+					});
+
+					isInit=true;
+					console.log("Audio start")
+
+			}
+			function getByteFrequencyDataAverage() {
+				analyser.getByteFrequencyData(frequencies);
+				return  frequencies.reduce(function (previous, current) {
+					return previous + current;
+				}) / analyser.frequencyBinCount;
+			};
+
 			function render() {
+				var size=1,tsize=1;
+
+				if(isInit){
+
+					tsize = getByteFrequencyDataAverage();
+					//console.log(size);
+
+				}
+
+
 
 				entities.forEach(function(value,index,array){
-					value.position.y+=1;
-					value.rotation.y+=0.01;
+					size=tsize;
+					if(index%2==0)size*=4;
+					value.position.y+=1*(1+size*0.1);
+					if(index%3==0)value.position.y+=1*(1+size*0.5);
+					if(index%5==0)value.position.x+=Math.sin(index*0.01)*size*0.1;
+
+					value.rotation.y+=0.01*(1+size*0.1);
+					value.scale.x = 1+size*0.02;
+					value.scale.y = 1+size*0.02;
+					if(index%7==0)value.scale.x=1+size*0.1;;
+					if(index%9==0)value.scale.y=1+size*0.1;;
+
 					if(value.position.y>5000)
 						value.position.y=-5000;
 
